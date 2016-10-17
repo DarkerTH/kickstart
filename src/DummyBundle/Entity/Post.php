@@ -1,14 +1,15 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace DummyBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
  *
  * @ORM\Table(name="posts")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="DummyBundle\Repository\PostRepository")
  */
 class Post
 {
@@ -24,21 +25,38 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
+     * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
+     * @ORM\Column(name="content", type="text")
      */
     private $content;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="meta", type="string", length=255, nullable=true)
+     */
+    private $meta;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="posts")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="createdAt", type="datetime", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime")
      */
     private $createdAt;
 
@@ -99,6 +117,38 @@ class Post
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    /**
+     * @param string $meta
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 
     /**
